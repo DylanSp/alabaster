@@ -1,0 +1,41 @@
+name:                alabaster
+version:             0.1.0.0
+#synopsis:
+#description:
+homepage:            https://github.com/DylanSp/alabaster#readme
+license:             MIT
+author:              Dylan
+maintainer:          dylan.richard.sprague@gmail.com
+copyright:           value
+category:            value
+extra-source-files:
+- README.md
+- LICENSE
+
+dependencies:
+  - base >= 4.7 && < 5
+  - core1
+
+ghc-options:
+  - -Wall
+  - -Wcompat
+  - -Wredundant-constraints
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+
+library:
+  source-dirs:        src
+
+executables:
+  alabaster-exe:
+    source-dirs:      app
+    main:             Main.hs
+    dependencies:
+      - alabaster
+
+tests:
+  alabaster-test:
+    source-dirs:      test
+    main:             Test.hs
+    dependencies:
+      - alabaster

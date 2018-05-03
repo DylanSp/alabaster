@@ -1,0 +1,4 @@
+resolver: lts-11.2
+extra-deps:
+  - git: https://github.com/DylanSp/core1.git
+    commit: 604f055b1760cbb2d2a2800fe43cd1dbab699bc2
