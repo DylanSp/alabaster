@@ -1,8 +1,10 @@
--- This file has been generated from package.yaml by hpack version 0.20.0.
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.1.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9d68f52c3e08b3693bded196ffb6cfacc6f639c39226a12cf0484f2eca3fcfd1
+-- hash: ae6a6287e4c841a91923b8757b7fbe803e23af9f8dcfe40e219c7fe99b7fe837
 
 name:           alabaster
 version:        0.1.0.0
@@ -14,11 +16,9 @@ copyright:      value
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
-cabal-version:  >= 1.10
-
 extra-source-files:
-    LICENSE
     README.md
+    LICENSE
 
 library
   hs-source-dirs:
