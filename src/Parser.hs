@@ -41,13 +41,6 @@ symbol = Tok.symbol lexer
 integer :: Parser Integer
 integer = Tok.integer lexer
 
-semi :: Parser String
-semi = Tok.semi lexer
-
-whiteSpace :: Parser ()
-whiteSpace = Tok.whiteSpace lexer
-
-
 {- Parser -}
 
 
@@ -64,7 +57,7 @@ decl = do
   lhs <- identifier
   _ <- symbol "="
   rhs <- expr
-  _ <- semi
+  _ <- symbol ";"
   return (lhs, rhs)
 
 -- includes application/operations, which have to be handled separately because of left-recursion
