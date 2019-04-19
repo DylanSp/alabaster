@@ -66,29 +66,20 @@ decl = do
   _ <- semi
   return (lhs, rhs)
 
--- includes application, which has to be handled separately because of left-recursion
+-- includes application/operations, which have to be handled separately because of left-recursion
 expr :: Parser CoreExpr
-expr =  {-parens expr 
-    <|> -}nonAppExpr `chainl1` (return Apply)
+expr =  nonRecursiveExpr `chainl1` (return Apply)
+    <|> nonRecursiveExpr `chainl1` (Op <$> operation)
 
-nonAppExpr :: Parser CoreExpr
-nonAppExpr =
+nonRecursiveExpr :: Parser CoreExpr
+nonRecursiveExpr =
         (parens expr)
     <|> (Var <$> identifier)
     <|> termLiteral
     <|> lambdaExpr
     <|> letExpr
     <|> ifExpr
-    <|> opExpr
     <|> fixExpr
-
-    {-
-applyExpr :: Parser CoreExpr
-applyExpr = do
-  func <- expr
-  arg <- expr
-  return $ Apply func arg
--}
 
 lambdaExpr :: Parser CoreExpr
 lambdaExpr = do
@@ -119,18 +110,6 @@ ifExpr = do
   _ <- symbol "else"
   falseExpr <- expr
   return $ If cond trueExpr falseExpr
-
-{-
-opExpr :: Parser CoreExpr
-opExpr = expr `chainl1` (Op <$> operation)
--}
-
-opExpr = do
-  lhs <- expr
-  op <- operation
-  rhs <- expr
-  return $ Op op lhs rhs
-
 
 operation :: Parser BinOp
 operation =  (symbol "+" >> return Add)
