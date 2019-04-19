@@ -43,9 +43,10 @@ typeCheck ast = case (typeOf ast) of
   Right rootType -> show rootType
 -}
 
+fromLeft (Left x) = x
 
 fromRight (Right (Program _ entry)) = entry
 
 prog1Text = "\\x : a . x"
 
-prog2Text = "((\\x : a . x) 1)"
+prog2Text = "(\\x : a . x) 1"

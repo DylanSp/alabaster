@@ -55,6 +55,7 @@ program :: Parser Program
 program = do
   decls <- many decl
   entrypoint <- expr
+  _ <- eof
   return $ Program decls entrypoint
 
 decl :: Parser Decl
@@ -68,8 +69,8 @@ decl = do
 
 -- includes application/operations, which have to be handled separately because of left-recursion
 expr :: Parser CoreExpr
-expr =  nonRecursiveExpr `chainl1` (return Apply)
-    <|> nonRecursiveExpr `chainl1` (Op <$> operation)
+expr =  nonRecursiveExpr `chainl1` (Op <$> operation)
+    <|> nonRecursiveExpr `chainl1` (return Apply)
 
 nonRecursiveExpr :: Parser CoreExpr
 nonRecursiveExpr =
