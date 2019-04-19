@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ae6a6287e4c841a91923b8757b7fbe803e23af9f8dcfe40e219c7fe99b7fe837
+-- hash: e65f297a95ca849e9677a0bee53348e4d3a3d618e0ff600a655c838fb96a3d0e
 
 name:           alabaster
 version:        0.1.0.0
@@ -21,12 +21,15 @@ extra-source-files:
     LICENSE
 
 library
+  exposed-modules:
+      Parser
   hs-source-dirs:
       src
   ghc-options: -Wall -Wcompat -Wredundant-constraints -Wincomplete-record-updates -Wincomplete-uni-patterns
   build-depends:
       base >=4.7 && <5
     , core1
+    , parsec
   other-modules:
       Paths_alabaster
   default-language: Haskell2010
@@ -40,6 +43,7 @@ executable alabaster-exe
       alabaster
     , base >=4.7 && <5
     , core1
+    , parsec
   other-modules:
       Paths_alabaster
   default-language: Haskell2010
@@ -54,6 +58,7 @@ test-suite alabaster-test
       alabaster
     , base >=4.7 && <5
     , core1
+    , parsec
   other-modules:
       Paths_alabaster
   default-language: Haskell2010
