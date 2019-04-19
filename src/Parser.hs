@@ -22,7 +22,7 @@ langDef = Tok.LanguageDef
   , Tok.opStart         = oneOf "+-*="
   , Tok.opLetter        = oneOf "="
   , Tok.reservedNames   = ["let", "in", "fix", "true", "false", "if", "then", "else", "Int", "Bool"]
-  , Tok.reservedOpNames = ["+", "-", "*", "==", "\\", ":", "->"]
+  , Tok.reservedOpNames = ["+", "-", "*", "==", "\\", ":", "."]
   , Tok.caseSensitive   = True
   }
 
@@ -87,7 +87,7 @@ lambdaExpr = do
   argName <- identifier
   _ <- symbol ":"
   argType <- typeExpr
-  _ <- symbol "->"
+  _ <- symbol "."
   body <- expr
   return $ Lambda argName argType body
 
