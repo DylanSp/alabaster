@@ -32,6 +32,9 @@ lexer = Tok.makeTokenParser langDef
 parens :: Parser a -> Parser a
 parens = Tok.parens lexer
 
+angles :: Parser a -> Parser a
+angles = Tok.angles lexer
+
 identifier :: Parser String
 identifier = Tok.identifier lexer
 
@@ -40,6 +43,7 @@ symbol = Tok.symbol lexer
 
 integer :: Parser Integer
 integer = Tok.integer lexer
+
 
 {- Parser -}
 
@@ -60,20 +64,21 @@ decl = do
   _ <- symbol ";"
   return (lhs, rhs)
 
--- includes application/operations, which have to be handled separately because of left-recursion
 expr :: Parser CoreExpr
-expr =  nonRecursiveExpr `chainl1` (Op <$> operation)
-    <|> nonRecursiveExpr `chainl1` (return Apply)
+expr =  applyExpr `chainl1` (Op <$> (angles operation))
 
-nonRecursiveExpr :: Parser CoreExpr
-nonRecursiveExpr =
-        (parens expr)
-    <|> (Var <$> identifier)
+applyExpr :: Parser CoreExpr
+applyExpr = nonLeftRecursiveExpr `chainl1` (return Apply)
+
+nonLeftRecursiveExpr :: Parser CoreExpr
+nonLeftRecursiveExpr =
+    (Var <$> identifier)
     <|> termLiteral
     <|> lambdaExpr
     <|> letExpr
     <|> ifExpr
     <|> fixExpr
+    <|> parens expr
 
 lambdaExpr :: Parser CoreExpr
 lambdaExpr = do
@@ -120,20 +125,31 @@ fixExpr = do
 typeExpr :: Parser Type
 typeExpr =  TVariable <$> identifier
         <|> TConstructor <$> typeLiteral
---        <|> typeFunction
+        <|> typeFunction
 
 typeFunction :: Parser Type
-typeFunction = do
-  func <- typeExpr
-  arg <- typeExpr
-  return $ TFunction func arg
+typeFunction = typeExpr `chainl1` (return TFunction)
+            <|> parens typeExpr
 
 typeLiteral :: Parser String
 typeLiteral =  symbol "Int"
            <|> symbol "Bool"
 
 termLiteral :: Parser CoreExpr
-termLiteral = Lit <$> (  (LInt <$> integer)
-                 <|> (symbol "true" >> (return $ LBool True))
-                 <|> (symbol "false" >> (return $ LBool False))
-                  )
+termLiteral =  Lit <$> (  integerLiteral
+                      <|> trueLiteral
+                      <|> falseLiteral
+                       )
+
+integerLiteral :: Parser Literal
+integerLiteral = LInt <$> integer
+
+trueLiteral :: Parser Literal
+trueLiteral = do
+  _ <- symbol "true"
+  return $ LBool True
+
+falseLiteral :: Parser Literal
+falseLiteral = do
+  _ <- symbol "false"
+  return $ LBool False

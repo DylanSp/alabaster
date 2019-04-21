@@ -35,18 +35,3 @@ checkDecl (ident, expression) = "Type of " ++ ident ++ " is " ++ (show (typeOf e
 showEither :: (Show a, Show b) => Either a b -> String
 showEither (Left str) = show str
 showEither (Right str) = show str 
-
-{-
-typeCheck :: CoreExpr -> Either String String
-typeCheck ast = case (typeOf ast) of
-  Left typeErr -> show typeErr
-  Right rootType -> show rootType
--}
-
-fromLeft (Left x) = x
-
-fromRight (Right (Program _ entry)) = entry
-
-prog1Text = "\\x : a . x"
-
-prog2Text = "(\\x : a . x) 1"
